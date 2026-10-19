@@ -6,6 +6,7 @@ import { ir } from "../rotas";
 import { Badge, Button, Card, Table, type Column } from "../ui";
 import { IconCarrinho, IconCheck, IconSearch } from "../ui/icons";
 import { FotoProduto } from "../ui/FotoProduto";
+import { Quantidade, useEstreito } from "../ui/Quantidade";
 import { AvisoPendente } from "./AvisoPendente";
 
 type Pagina = { items: ItemCatalogo[]; nextCursor: string | null };
@@ -21,6 +22,7 @@ export function Catalogo() {
   const [escolhas, setEscolhas] = useState<Record<string, Escolha>>({});
   const [adicionado, setAdicionado] = useState<string | null>(null);
   const [tentativa, setTentativa] = useState(0);
+  const estreito = useEstreito();
   const pedido = useRef(0);
 
   const consultar = useCallback(async (termo: string, depoisDe: string | null) => {
@@ -227,6 +229,76 @@ export function Catalogo() {
               </button>
             ))}
           </div>
+          {estreito && !carregando && !erro && itens.length > 0 ? (
+            <ul className="pt-cartoes">
+              {itens.map((i) => {
+                const u = unidadeDe(i);
+                const texto = escolhaDe(i).quantidade;
+                const q = normalizarQuantidade(texto);
+                const invalida = !q || !multiploOk(q, u.multiple);
+                return (
+                  <li key={i.itemCode} className="pt-cartao">
+                    <div className="pt-cartao__topo">
+                      <FotoProduto src={i.imageUrl} unidade={u.label} alt={i.description} grande />
+                      <div className="pt-produto__textos">
+                        <span className="pt-produto__nome">{i.description}</span>
+                        <span className="nh-caption nh-num">
+                          {i.itemCode} · {i.group}
+                        </span>
+                        {i.availability === "ON_REQUEST" && (
+                          <Badge tone="warn" dot>
+                            Sob consulta
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                    <div className="pt-cartao__preco">
+                      <span className="pt-cartao__valor nh-num">{brl(u.referenceUnitPrice)}</span>
+                      <span className="nh-caption">por {u.description.toLowerCase()}</span>
+                      {u.priceOrigin === "ESPECIAL" && <Badge tone="ok">Preço do seu contrato</Badge>}
+                      {i.priceRequiresReview && <span className="nh-caption">varia com a quantidade</span>}
+                    </div>
+                    {i.units.length > 1 && (
+                      <div className="pt-cartao__unidades" role="group" aria-label={`Unidade de ${i.itemCode}`}>
+                        {i.units.map((x) => (
+                          <button
+                            key={x.entry}
+                            type="button"
+                            aria-pressed={x.entry === u.entry}
+                            className={x.entry === u.entry ? "pt-chip is-ativo" : "pt-chip"}
+                            onClick={() => mudar(i, { uomEntry: x.entry, quantidade: qtd(x.multiple) })}
+                          >
+                            {x.description} · {brl(x.referenceUnitPrice)}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    <div className="pt-cartao__acoes">
+                      <Quantidade
+                        valor={texto}
+                        multiplo={u.multiple}
+                        rotulo={`${i.itemCode} em ${u.label}`}
+                        invalida={invalida}
+                        onChange={(v) => mudar(i, { quantidade: v })}
+                        onEnter={() => incluir(i)}
+                      />
+                      <Button
+                        variant={adicionado === i.itemCode ? "secondary" : "primary"}
+                        size="lg"
+                        className="pt-cartao__incluir"
+                        onClick={() => incluir(i)}
+                        disabled={invalida}
+                        icon={adicionado === i.itemCode ? <IconCheck size={16} /> : <IconCarrinho size={16} />}
+                      >
+                        {adicionado === i.itemCode ? "Incluído" : "Incluir"}
+                      </Button>
+                    </div>
+                    {u.multiple !== "1" && <span className="nh-caption">Vendido em múltiplos de {qtd(u.multiple)}</span>}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
           <Table
             columns={colunas}
             rows={itens}
@@ -238,6 +310,7 @@ export function Catalogo() {
               description: busca ? "Tente parte da descrição (ex.: forma, bisnaguinha) ou o código do item." : "A publicação de itens é feita pela equipe comercial no SAP.",
             }}
           />
+          )}
           {cursor && !carregando && (
             <div className="pt-mais">
               <Button onClick={maisItens} loading={carregandoMais}>
@@ -247,8 +320,27 @@ export function Catalogo() {
           )}
         </Card>
       </div>
-      <ResumoCarrinho />
+      {estreito ? <BarraCarrinho /> : <ResumoCarrinho />}
     </div>
+  );
+}
+
+/** No celular o resumo vira barra fixa no rodapé: o carrinho fica a um toque. */
+function BarraCarrinho() {
+  const { linhas } = useCarrinho();
+  if (!linhas.length) return null;
+  return (
+    <button type="button" className="pt-barra-carrinho" onClick={() => ir({ tela: "carrinho" })}>
+      <span className="pt-barra-carrinho__icone" aria-hidden="true">
+        <IconCarrinho />
+        <span className="nh-num">{linhas.length}</span>
+      </span>
+      <span className="pt-barra-carrinho__texto">
+        <strong>Ver carrinho</strong>
+        <span className="nh-num">{brl(somaReferencia(linhas))} de referência</span>
+      </span>
+      <span aria-hidden="true">›</span>
+    </button>
   );
 }
 

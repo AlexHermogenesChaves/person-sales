@@ -7,6 +7,7 @@ import { Badge, Button, Card, EmptyState, Skeleton, Table, type Column } from ".
 import { IconAlerta, IconAtualizar, IconCarrinho, IconRelogio, IconSearch } from "../ui/icons";
 import { AvisoPendente } from "./AvisoPendente";
 import { PainelPedido } from "./PainelPedido";
+import { useEstreito } from "../ui/Quantidade";
 
 // Página inicial do comprador. Tudo vem do SAP na hora: pedidos do cliente de
 // qualquer origem (portal, vendedor, EDI) dos últimos seis meses e os indicadores
@@ -49,6 +50,7 @@ export function Inicio({ eu }: { eu: Eu }) {
   const [busca, setBusca] = useState("");
   const [aberto, setAberto] = useState<Pedido | null>(null);
   const [limite, setLimite] = useState(15);
+  const estreito = useEstreito();
 
   const carregar = useCallback(async () => {
     setErro(null);
@@ -255,6 +257,34 @@ export function Inicio({ eu }: { eu: Eu }) {
             </button>
           ))}
         </div>
+        {estreito && pedidos && visiveis.length > 0 ? (
+          <ul className="pt-cartoes">
+            {visiveis.slice(0, limite).map((p) => (
+              <li key={`${p.type}-${p.docEntry}`}>
+                <button type="button" className="pt-cartao pt-cartao--pedido" onClick={() => setAberto(p)}>
+                  <span className="pt-cartao__linha">
+                    <strong className="nh-num">{p.type === "DRAFT" ? `Rascunho ${p.docNum}` : `Pedido ${p.docNum}`}</strong>
+                    <Badge tone={SITUACAO[p.status].tom} dot>
+                      {SITUACAO[p.status].rotulo}
+                    </Badge>
+                  </span>
+                  <span className="pt-cartao__linha nh-caption nh-num">
+                    <span>
+                      {dataBr(p.date)} · {ORIGEM[p.origin]} · {p.lines.length} itens
+                    </span>
+                    <strong className="pt-cartao__subtotal">{brl(p.total)}</strong>
+                  </span>
+                  {Number(p.pending) > 0 && p.status !== "CANCELADO" && (
+                    <span className={previsaoVencida(p, hoje) ? "pt-cartao__linha nh-caption pt-texto-perigo" : "pt-cartao__linha nh-caption"}>
+                      <span>Falta chegar {brl(p.pending)}</span>
+                      <span>{p.status === "AGUARDANDO_APROVACAO" ? "após aprovação" : `previsão ${dataBr(p.expectedDate)}`}</span>
+                    </span>
+                  )}
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
         <Table
           columns={colunas}
           rows={visiveis.slice(0, limite)}
@@ -264,6 +294,7 @@ export function Inicio({ eu }: { eu: Eu }) {
           onRowClick={setAberto}
           empty={{ title: busca ? `Nenhum pedido com “${busca}”` : "Nenhum pedido neste filtro", description: "A lista mostra os últimos 6 meses." }}
         />
+        )}
         {pedidos && visiveis.length > 0 && (
           <div className="pt-totais-lista nh-num">
             <span>

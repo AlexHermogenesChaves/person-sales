@@ -6,6 +6,7 @@ import { ir } from "../rotas";
 import { Button, Card, EmptyState, Input, Select, Skeleton, Table, Textarea, type Column } from "../ui";
 import { IconLixo, IconVoltar } from "../ui/icons";
 import { FotoProduto } from "../ui/FotoProduto";
+import { Quantidade, useEstreito } from "../ui/Quantidade";
 import { AvisoPendente } from "./AvisoPendente";
 import { multiploOk } from "./Catalogo";
 
@@ -18,6 +19,7 @@ export function Carrinho() {
   const [rascunhos, setRascunhos] = useState<Record<string, string>>({});
   const [erro, setErro] = useState<ErroDaApi | null>(null);
   const [revisando, setRevisando] = useState(false);
+  const estreito = useEstreito();
   const [avisoRepetir] = useState(() => {
     try {
       const aviso = sessionStorage.getItem("portal:aviso-repetir");
@@ -184,7 +186,40 @@ export function Carrinho() {
           }
           flush
         >
-          <Table columns={colunas} rows={linhas} rowKey={chave} dense />
+          {estreito ? (
+            <ul className="pt-cartoes">
+              {linhas.map((l) => {
+                const texto = valorDigitado(l);
+                const q = normalizarQuantidade(texto);
+                const invalida = !q || !multiploOk(q, l.multiple);
+                const msg = erroDaLinha(linhas.indexOf(l));
+                return (
+                  <li key={chave(l)} className="pt-cartao">
+                    <div className="pt-cartao__topo">
+                      <FotoProduto src={l.imagem} unidade={l.unit} alt={l.description} grande />
+                      <div className="pt-produto__textos">
+                        <span className="pt-produto__nome">{l.description}</span>
+                        <span className="nh-caption nh-num">
+                          {l.itemCode} · {brl(l.refPrice)} por {l.unit}
+                        </span>
+                        {msg && <span className="nh-field__error" role="alert">{msg}</span>}
+                      </div>
+                      <button type="button" className="pt-icone-btn" onClick={() => remover(l.itemCode, l.uomEntry)} aria-label={`Remover ${l.itemCode}`}>
+                        <IconLixo />
+                      </button>
+                    </div>
+                    <div className="pt-cartao__acoes">
+                      <Quantidade valor={texto} multiplo={l.multiple} rotulo={l.itemCode} invalida={invalida} onChange={(v) => confirmarQuantidade(l, v)} />
+                      <span className="pt-cartao__subtotal nh-num">{brl(somaReferencia([l]))}</span>
+                    </div>
+                    {invalida && <span className="nh-field__error">Vendido em múltiplos de {qtd(l.multiple)}</span>}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <Table columns={colunas} rows={linhas} rowKey={chave} dense />
+          )}
         </Card>
       </div>
 

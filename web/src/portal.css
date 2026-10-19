@@ -726,3 +726,69 @@ h1 { font-size: 26px; font-weight: 650; }
 }
 .pt-menu__marca .pt-marca { padding: var(--s-1) var(--s-2); }
 .pt-entrar__selo { flex-direction: column; align-items: flex-start; gap: var(--s-3); }
+
+/* --- Celular: cartões no lugar de tabela (catálogo, carrinho, revisão, pedidos) ---- */
+
+.pt-cartoes { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
+.pt-cartoes > li { border-bottom: 1px solid var(--c-line); }
+.pt-cartoes > li:last-child { border-bottom: 0; }
+.pt-cartao { display: flex; flex-direction: column; gap: var(--s-3); padding: var(--s-4); }
+.pt-cartao__topo { display: flex; align-items: flex-start; gap: var(--s-3); }
+.pt-cartao__topo .pt-produto__textos { flex: 1; }
+.pt-cartao__preco { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-1) var(--s-2); }
+.pt-cartao__valor { color: var(--c-text); font-family: var(--font-display); font-size: var(--fs-display); font-weight: 700; }
+.pt-cartao__unidades { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+.pt-cartao__acoes { display: flex; align-items: center; gap: var(--s-3); }
+.pt-cartao__incluir { flex: 1; min-height: 44px; }
+.pt-cartao__subtotal { margin-left: auto; color: var(--c-text); font-size: var(--fs-title); font-weight: var(--fw-bold); }
+.pt-cartao--pedido { width: 100%; gap: var(--s-1); border: 0; background: transparent; font: inherit; text-align: left; cursor: pointer; }
+.pt-cartao--pedido:active { background: var(--c-surface-2); }
+.pt-cartao__linha { display: flex; justify-content: space-between; align-items: center; gap: var(--s-2); }
+.pt-cartao__linha strong { color: var(--c-text); }
+
+.pt-qtd-passo { display: inline-flex; align-items: stretch; flex: none; height: 44px; border: 1px solid var(--c-border-strong); border-radius: var(--r-md); background: var(--c-surface); overflow: hidden; }
+.pt-qtd-passo.is-invalida { border-color: var(--c-danger); }
+.pt-qtd-passo button { width: 44px; border: 0; background: var(--c-surface-2); color: var(--c-brand); font: inherit; font-size: 20px; font-weight: var(--fw-bold); line-height: 1; cursor: pointer; }
+.pt-qtd-passo button:active:not(:disabled) { background: var(--c-brand-soft); }
+.pt-qtd-passo button:disabled { color: var(--c-text-3); opacity: 0.5; cursor: not-allowed; }
+.pt-qtd-passo input { width: 56px; border: 0; border-left: 1px solid var(--c-line); border-right: 1px solid var(--c-line); background: transparent; color: var(--c-text); font: inherit; font-size: var(--fs-title); font-weight: var(--fw-bold); text-align: center; }
+.pt-qtd-passo input:focus-visible { outline: none; box-shadow: inset var(--focus-ring); }
+
+.pt-linhas-revisao { margin: 0; padding: 0; list-style: none; }
+.pt-linhas-revisao li { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--s-3); padding: var(--s-3) var(--s-4); border-bottom: 1px solid var(--c-line); }
+.pt-linhas-revisao li:last-child { border-bottom: 0; }
+.pt-linhas-revisao strong { color: var(--c-text); white-space: nowrap; }
+
+.pt-barra-carrinho {
+  position: fixed;
+  left: var(--s-3);
+  right: var(--s-3);
+  bottom: calc(var(--s-3) + env(safe-area-inset-bottom, 0px));
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: 56px;
+  padding: 0 var(--s-4);
+  border: 0;
+  border-radius: var(--r-lg);
+  background: var(--c-brand);
+  color: var(--c-text-invert);
+  box-shadow: var(--shadow-2);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.pt-barra-carrinho__icone { position: relative; display: grid; place-items: center; }
+.pt-barra-carrinho__icone span { position: absolute; top: -8px; right: -10px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: var(--r-pill); background: var(--c-marca-sobre-escuro); color: var(--c-sobre-marca); font-size: 11px; font-weight: var(--fw-bold); line-height: 18px; text-align: center; }
+.pt-barra-carrinho__texto { flex: 1; display: flex; flex-direction: column; }
+.pt-barra-carrinho__texto span { font-size: var(--fs-caption); opacity: 0.85; }
+
+@media (max-width: 760px) {
+  /* Espaço para a barra fixa não cobrir o último cartão. */
+  .pt-grade:has(.pt-barra-carrinho) { padding-bottom: 80px; }
+  .pt-etapas { gap: var(--s-1) var(--s-3); font-size: var(--fs-caption); }
+  .pt-chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .pt-chip { flex: none; }
+  .nh-card__head { padding: var(--s-3) var(--s-4); }
+}

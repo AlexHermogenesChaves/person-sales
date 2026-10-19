@@ -6,6 +6,7 @@ import { ir } from "../rotas";
 import { Badge, Button, Card, EmptyState, Table, type Column } from "../ui";
 import { IconAlerta, IconRelogio, IconVoltar } from "../ui/icons";
 import { guardarResultado } from "./Protocolo";
+import { useEstreito } from "../ui/Quantidade";
 
 export function Revisao() {
   const { revisao, linhas } = useCarrinho();
@@ -13,6 +14,7 @@ export function Revisao() {
   const [enviando, setEnviando] = useState(false);
   const [revisando, setRevisando] = useState(false);
   const [erro, setErro] = useState<ErroDaApi | null>(null);
+  const estreito = useEstreito();
 
   useEffect(() => {
     setRestante(segundosAte(revisao?.expiresAt));
@@ -140,7 +142,26 @@ export function Revisao() {
           }
           flush
         >
-          <Table columns={colunas} rows={revisao.lines} rowKey={(l) => `${l.itemCode}:${l.uomEntry}`} dense />
+          {estreito ? (
+            <ul className="pt-linhas-revisao">
+              {revisao.lines.map((l) => (
+                <li key={`${l.itemCode}:${l.uomEntry}`}>
+                  <div className="pt-produto__textos">
+                    <span className="pt-produto__nome">{l.description}</span>
+                    <span className="nh-caption nh-num">
+                      {qtd(l.quantity)} {l.unit} × {brl(l.unitPrice)}
+                      {Number(l.tax) > 0 && ` · impostos ${brl(l.tax)}`}
+                    </span>
+                    {l.priceOrigin === "QUANTIDADE" && <Badge tone="info">faixa por quantidade</Badge>}
+                    {l.priceOrigin === "ESPECIAL" && <Badge tone="ok">contrato</Badge>}
+                  </div>
+                  <strong className="nh-num">{brl(l.lineTotal)}</strong>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <Table columns={colunas} rows={revisao.lines} rowKey={(l) => `${l.itemCode}:${l.uomEntry}`} dense />
+          )}
         </Card>
         <Card title="Entrega">
           <dl className="pt-dados">
