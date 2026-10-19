@@ -1,0 +1,35 @@
+{
+  "name": "portal-pedidos-poc",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "POC do portal de pedidos de vendas com SAP Business One",
+  "scripts": {
+    "dev": "tsx server/index.ts",
+    "dev:watch": "tsx watch server/index.ts",
+    "build": "tsc --noEmit && vite build",
+    "build:vercel": "tsc --noEmit && vite build --mode vercel",
+    "preview:vercel": "vite preview --port 5191 --strictPort",
+    "start": "set NODE_ENV=production&& tsx server/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@fontsource-variable/montserrat": "^5.1.0",
+    "@fontsource/lobster": "^5.1.0",
+    "@noble/hashes": "^1.4.0",
+    "express": "4.21.2",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "4.17.21",
+    "@types/node": "22.10.5",
+    "@types/react": "19.1.2",
+    "@types/react-dom": "19.1.2",
+    "@vitejs/plugin-react": "4.3.4",
+    "tsx": "4.19.2",
+    "typescript": "5.7.2",
+    "vite": "6.0.7"
+  }
+}

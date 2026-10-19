@@ -1,0 +1,39 @@
+/* =============================================================================
+   Marca do cliente: Grupo Farina (grupofarina.com.br), para a demonstração.
+   -----------------------------------------------------------------------------
+   Carregado depois de tokens.css. Fundo, superfícies, menu e botões continuam na
+   paleta SPS (azul SAP + navy) — decisão do Alex em 19/10/2026: o marrom do site
+   do cliente como fundo ficou ruim. Do cliente entram só o amarelo como assinatura
+   (símbolo, destaque, mês atual), a tipografia, a foto da entrada e os produtos.
+   Trocar de cliente = trocar este arquivo e o símbolo em ui/Marca.tsx.
+   ========================================================================== */
+
+:root {
+  --nh-amarelo: #fcb92e;        /* amarelo do cabeçalho do site do cliente */
+
+  --font-display: "Montserrat Variable", "Segoe UI", system-ui, sans-serif;
+  --font-script: "Lobster", "Brush Script MT", cursive;
+
+  --c-marca: #e9a515;           /* amarelo um tom abaixo: aparece sobre branco */
+  --c-marca-texto: #8a5300;     /* amarelo legível como texto sobre claro (AA) */
+  --c-marca-soft: #fff3d6;
+  --c-marca-sobre-escuro: var(--nh-amarelo);
+  --c-sobre-marca: #11314f;     /* texto sobre o amarelo (contador, avatar) */
+
+  /* Foto da capa do site do cliente (servida pelo CDN dele), atrás da entrada. */
+  --foto-entrada: url("https://static.wixstatic.com/media/b09142_8aa486353ea241a297d1a61485ef84b1f000.jpg/v1/fill/w_1200,h_1100,q_80,enc_auto/capa.jpg");
+}
+
+:root[data-tema="escuro"] {
+  --c-marca: var(--nh-amarelo);
+  --c-marca-texto: #ffc64d;
+  --c-marca-soft: #33280f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) {
+    --c-marca: var(--nh-amarelo);
+    --c-marca-texto: #ffc64d;
+    --c-marca-soft: #33280f;
+  }
+}

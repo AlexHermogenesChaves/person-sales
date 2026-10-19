@@ -1,0 +1,254 @@
+/* =============================================================================
+   tokens.css — Design tokens da casa (kit do NFeIntegration, marca SPS)
+   -----------------------------------------------------------------------------
+   Fonte da verdade visual do produto. Nenhum hex solto em componente.
+   Para levar o kit a outro projeto: copie este arquivo, troque APENAS o bloco
+   "Marca" e não toque no resto — a escala, o ritmo e os neutros são o que dá
+   a cara de produto, e eles são os mesmos em todos os projetos.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* --- Marca SPS / SAP B1 (theme.ts do SapPortalCompras) — o único bloco que muda -- */
+  --nh-azul-sap: #1c64be;
+  --nh-navy: #0b3d6b;
+  --nh-teal: #0096c7;
+  --nh-ciano: #00b7f0;
+  --nh-tinta: #11314f;
+  --nh-nevoa: #f3f6fa;          /* "farinha": fundo frio, não creme */
+  --nh-trigo: #d99a1e;          /* assinatura da marca Casa Trigal */
+  --nh-trigo-claro: #f2c45a;
+
+  /* Papéis da marca: trigo é assinatura (símbolo, destaque, mês atual), nunca ação. */
+  --c-marca: var(--nh-trigo);
+  --c-marca-texto: #8a5a00;     /* trigo legível como texto sobre claro (AA) */
+  --c-marca-soft: #fbf1db;
+  --c-marca-sobre-escuro: var(--nh-trigo-claro);
+  --c-sobre-marca: var(--nh-tinta);
+
+  /* Textura de grãos sobre o navy (menu e entrada). Branco a 5%: lê igual nos dois temas. */
+  --textura-graos: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cellipse cx='10' cy='12' rx='2.2' ry='4' transform='rotate(-34 10 12)'/%3E%3Cellipse cx='38' cy='30' rx='2.2' ry='4' transform='rotate(34 38 30)'/%3E%3Cellipse cx='22' cy='46' rx='2.2' ry='4' transform='rotate(-20 22 46)'/%3E%3C/g%3E%3C/svg%3E");
+
+  /* --- Papéis de cor ------------------------------------------------------ */
+  --c-brand: var(--nh-azul-sap);
+  --c-brand-hover: #0e4fa3;
+  --c-brand-active: #0a3d7a;
+  --c-brand-soft: #e6eff9;      /* fundo de destaque discreto */
+  --c-accent: var(--nh-teal);
+
+  --c-bg: var(--nh-nevoa);      /* fundo da aplicação */
+  --c-surface: #ffffff;         /* card, tabela, painel */
+  --c-surface-2: #f4f8fc;       /* cabeçalho de tabela, faixa sutil */
+
+  --c-border: #d6e2f0;
+  --c-border-strong: #bcd0e6;
+  --c-line: #e6eef7;            /* divisória interna, mais leve que a borda */
+
+  --c-text: var(--nh-tinta);    /* título e valor */
+  --c-text-2: #51657a;          /* corpo */
+  --c-text-3: #5c6f85;          /* secundário — menor hex com contraste AA */
+  --c-text-invert: #ffffff;
+
+  /* --- Superfície escura: a barra do topo é onde a marca aparece --------- */
+  --c-nav-from: #0b3d6b;
+  --c-nav-to: #062944;
+  --c-nav-text: #cfe0f2;
+  --c-nav-text-strong: #ffffff;
+  --c-nav-text-dim: #8fa8c6;
+  --c-nav-hover: rgba(255, 255, 255, 0.07);
+  --c-nav-active: rgba(255, 255, 255, 0.12);
+  --c-nav-line: rgba(255, 255, 255, 0.1);
+
+  /* Status — sempre par (texto forte + fundo suave) */
+  --c-ok: #0e7a4a;
+  --c-ok-soft: #e3f5ec;
+  --c-warn: #9a6510;
+  --c-warn-soft: #fdf1dd;
+  --c-danger: #b42318;
+  --c-danger-soft: #fdeceb;
+  --c-info: var(--nh-azul-sap);
+  --c-info-soft: var(--c-brand-soft);
+
+  /* --- Ritmo (escala de 4px; use SÓ estes valores) ------------------------ */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+
+  /* --- Raio: app de trabalho, não landing -------------------------------- */
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-pill: 999px;
+
+  /* --- Elevação: quase invisível. A borda faz o trabalho. ---------------- */
+  --shadow-1: 0 1px 2px rgba(10, 42, 102, 0.06);
+  --shadow-2: 0 8px 24px rgba(10, 42, 102, 0.12);
+
+  /* --- Tipografia: 5 tamanhos, 2 pesos, e acabou ------------------------- */
+  --font: "Segoe UI", Inter, system-ui, -apple-system, Arial, sans-serif;
+  /* Display só em título e número de destaque. Self-hosted (@fontsource), 1 arquivo variável. */
+  --font-display: "Bricolage Grotesque Variable", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Cascadia Mono", Consolas, "SF Mono", ui-monospace, monospace;
+
+  --fs-caption: 12px;
+  --fs-small: 13px;
+  --fs-body: 14px;   /* padrão do app */
+  --fs-title: 16px;  /* título de card / seção */
+  --fs-display: 20px;/* título de tela e valor de KPI */
+
+  --fw-normal: 400;
+  --fw-bold: 600;
+
+  --lh-tight: 1.25;
+  --lh-normal: 1.5;
+
+  /* --- Movimento: curto, ou nenhum --------------------------------------- */
+  --t-fast: 120ms ease;
+  --t-base: 180ms ease;
+
+  --focus-ring: 0 0 0 2px var(--c-surface), 0 0 0 4px var(--nh-ciano);
+
+  /* Derivados que aparecem em componente e precisam virar no tema escuro. */
+  --c-top-bg: rgba(255, 255, 255, 0.9);
+  --c-chart-bar: #b9d4f2;
+  --c-switch-thumb: #ffffff;
+  --c-operador-bg: #dff5f7;
+  --c-operador-fg: #0b6e7d;
+  --c-operador-ring: #b4e6ec;
+  --c-info-line: #c6dcf7;
+  --c-warn-line: #f2dfae;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t-fast: 1ms;
+    --t-base: 1ms;
+  }
+}
+
+/* =============================================================================
+   Tema escuro
+   -----------------------------------------------------------------------------
+   Só os PAPÉIS mudam — o bloco "Marca" continua sendo a marca. O escuro é
+   derivado do navy da identidade, não de cinza neutro: produto de tema escuro
+   com fundo cinza perde a marca junto com a luz.
+   Aplicado por `data-tema="escuro"` no <html>; sem atributo, segue o sistema.
+   ========================================================================== */
+
+:root[data-tema="escuro"] {
+  color-scheme: dark;
+
+  --c-marca: var(--nh-trigo-claro);
+  --c-marca-texto: var(--nh-trigo-claro);
+  --c-marca-soft: #33280f;
+
+  --c-brand: #4a9bf0;
+  --c-brand-hover: #63aaf5;
+  --c-brand-active: #7cb9f8;
+  --c-brand-soft: #143050;
+  --c-accent: var(--nh-ciano);
+
+  --c-bg: #0a1728;
+  --c-surface: #10233c;
+  --c-surface-2: #152b47;
+
+  --c-border: #1f3c5e;
+  --c-border-strong: #2d5580;
+  --c-line: #1a3354;
+
+  --c-text: #e9f1f9;
+  --c-text-2: #bacde0;
+  --c-text-3: #90a9c4;
+  --c-text-invert: #06111f;
+
+  --c-ok: #4ecb8c;
+  --c-ok-soft: #103527;
+  --c-warn: #f0b657;
+  --c-warn-soft: #3a2a10;
+  --c-danger: #f4837a;
+  --c-danger-soft: #3d1a18;
+  --c-info: var(--c-brand);
+  --c-info-soft: var(--c-brand-soft);
+
+  --c-nav-from: #0c2c56;
+  --c-nav-to: #05162b;
+  --c-nav-text: #bed3ea;
+  --c-nav-text-dim: #7e9ab8;
+  --c-nav-line: rgba(255, 255, 255, 0.08);
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+  --focus-ring: 0 0 0 2px var(--c-bg), 0 0 0 4px var(--nh-ciano);
+
+  --c-top-bg: rgba(16, 35, 60, 0.88);
+  --c-chart-bar: #2f5f92;
+  --c-switch-thumb: #eaf3fb;
+  --c-operador-bg: #0e3a42;
+  --c-operador-fg: #6fdfe9;
+  --c-operador-ring: #16606d;
+  --c-info-line: #24487a;
+  --c-warn-line: #5a4318;
+}
+
+/* Sem escolha explícita, obedece ao sistema. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) {
+    color-scheme: dark;
+
+    --c-marca: var(--nh-trigo-claro);
+    --c-marca-texto: var(--nh-trigo-claro);
+    --c-marca-soft: #33280f;
+
+    --c-brand: #4a9bf0;
+    --c-brand-hover: #63aaf5;
+    --c-brand-active: #7cb9f8;
+    --c-brand-soft: #143050;
+
+    --c-bg: #0a1728;
+    --c-surface: #10233c;
+    --c-surface-2: #152b47;
+
+    --c-border: #1f3c5e;
+    --c-border-strong: #2d5580;
+    --c-line: #1a3354;
+
+    --c-text: #e9f1f9;
+    --c-text-2: #bacde0;
+    --c-text-3: #90a9c4;
+    --c-text-invert: #06111f;
+
+    --c-ok: #4ecb8c;
+    --c-ok-soft: #103527;
+    --c-warn: #f0b657;
+    --c-warn-soft: #3a2a10;
+    --c-danger: #f4837a;
+    --c-danger-soft: #3d1a18;
+    --c-info: #4a9bf0;
+    --c-info-soft: #143050;
+
+    --c-nav-from: #0c2c56;
+    --c-nav-to: #05162b;
+    --c-nav-text: #bed3ea;
+    --c-nav-text-dim: #7e9ab8;
+    --c-nav-line: rgba(255, 255, 255, 0.08);
+
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-2: 0 8px 24px rgba(0, 0, 0, 0.5);
+    --focus-ring: 0 0 0 2px var(--c-bg), 0 0 0 4px var(--nh-ciano);
+
+    --c-top-bg: rgba(16, 35, 60, 0.88);
+    --c-chart-bar: #2f5f92;
+    --c-switch-thumb: #eaf3fb;
+    --c-operador-bg: #0e3a42;
+    --c-operador-fg: #6fdfe9;
+    --c-operador-ring: #16606d;
+    --c-info-line: #24487a;
+    --c-warn-line: #5a4318;
+  }
+}
